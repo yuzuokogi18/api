@@ -25,7 +25,7 @@ class UserCreate(BaseModel):
     name: str
     password: str
     confirm_password: str
-    role: UserRole = UserRole.CAREGIVER
+    role: str = "CAREGIVER"   # ⬅️ STRING, NO ENUM
     phone: Optional[str] = None
 
     @validator('confirm_password')

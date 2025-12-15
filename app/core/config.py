@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     # Configuración del servidor
     HOST: str = Field(default="0.0.0.0", env="HOST")
-    PORT: int = Field(default=8000, env="PORT")
+    PORT: int = Field(default=8081, env="PORT")  # 👈 PUERTO MODIFICADO
 
     # Seguridad
     SECRET_KEY: str = Field(env="SECRET_KEY")
@@ -35,33 +35,36 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = Field(env="DB_PASSWORD")
     DB_CHARSET: str = Field(default="utf8mb4", env="DB_CHARSET")
 
-    # Email (AWS SES o SMTP)
+    # Email
     EMAIL_HOST: str = Field(default="localhost", env="EMAIL_HOST")
     EMAIL_PORT: int = Field(default=587, env="EMAIL_PORT")
     EMAIL_USER: str = Field(default="", env="EMAIL_USER")
     EMAIL_PASSWORD: str = Field(default="", env="EMAIL_PASSWORD")
     FROM_EMAIL: str = Field(default="noreply@pillcare360.com", env="FROM_EMAIL")
 
-    # AWS (para SES y SNS)
+    # AWS
     AWS_ACCESS_KEY_ID: str = Field(default="", env="AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY: str = Field(default="", env="AWS_SECRET_ACCESS_KEY")
     AWS_REGION: str = Field(default="us-east-1", env="AWS_REGION")
 
     # CORS
     CORS_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:5173"],
+        default=[
+            "http://localhost:3000",
+            "http://localhost:5173"
+        ],
         env="CORS_ORIGINS"
     )
 
-    # Configuración de alarmas
-    ALARM_CHECK_INTERVAL: int = Field(default=60, env="ALARM_CHECK_INTERVAL")  # segundos
-    COMPLIANCE_THRESHOLD: float = Field(default=75.0, env="COMPLIANCE_THRESHOLD")  # porcentaje
+    # Alarmas
+    ALARM_CHECK_INTERVAL: int = Field(default=60, env="ALARM_CHECK_INTERVAL")
+    COMPLIANCE_THRESHOLD: float = Field(default=75.0, env="COMPLIANCE_THRESHOLD")
     MAX_SNOOZE_ATTEMPTS: int = Field(default=3, env="MAX_SNOOZE_ATTEMPTS")
 
     # Archivos
     UPLOAD_FOLDER: str = Field(default="uploads", env="UPLOAD_FOLDER")
     REPORTS_FOLDER: str = Field(default="reports", env="REPORTS_FOLDER")
-    MAX_FILE_SIZE: int = Field(default=5*1024*1024, env="MAX_FILE_SIZE")  # 5MB
+    MAX_FILE_SIZE: int = Field(default=5*1024*1024, env="MAX_FILE_SIZE")
 
     # Logging
     LOG_LEVEL: str = Field(default="INFO", env="LOG_LEVEL")
@@ -72,7 +75,11 @@ class Settings(BaseSettings):
     @property
     def database_url(self) -> str:
         """Construir URL de conexión MySQL"""
-        return f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?charset={self.DB_CHARSET}"
+        return (
+            f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}"
+            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            f"?charset={self.DB_CHARSET}"
+        )
 
     @property
     def is_production(self) -> bool:

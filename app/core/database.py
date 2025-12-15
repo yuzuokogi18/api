@@ -24,13 +24,14 @@ def get_settings_safe():
         # Configuración por defecto para desarrollo
         class DefaultSettings:
             def __init__(self):
-                self.DB_HOST = "localhost"
-                self.DB_PORT = 3306
-                self.DB_NAME = "pillcare360"
-                self.DB_USER = "pillcare360_user"
-                self.DB_PASSWORD = "password"
-                self.DB_CHARSET = "utf8mb4"
-                self.DEBUG = True
+                  self.DB_HOST = "localhost"
+                  self.DB_PORT = 3306
+                  self.DB_NAME = "pillcare360"
+                  self.DB_USER = "pillcare_user"
+                  self.DB_PASSWORD = "password123"
+                  self.DB_CHARSET = "utf8mb4"
+                  self.DB_CHARSET = "utf8mb4"
+                  self.DEBUG = True
 
             @property
             def database_url(self):

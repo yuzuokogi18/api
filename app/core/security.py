@@ -7,9 +7,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 
-from app.core.config import get_settings
+from app.core.database import get_settings_safe
 
-settings = get_settings()
+settings = get_settings_safe()
 
 # Configurar contexto de hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -17,16 +17,19 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-    Verificar contraseña
+    Verificar contraseña (bcrypt máx 72 bytes)
     """
+    plain_password = plain_password[:72]
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
     """
-    Hash de contraseña
+    Hash de contraseña (bcrypt máx 72 bytes)
     """
+    password = password[:72]
     return pwd_context.hash(password)
+
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
